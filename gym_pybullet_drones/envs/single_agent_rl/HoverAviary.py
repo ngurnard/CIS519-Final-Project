@@ -72,9 +72,7 @@ class HoverAviary(BaseSingleAgentAviary):
             The reward.
 
         """
-        # Original rewards function from the paper
-        # state = self._getDroneStateVector(0)
-        # return -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
+        
 
         # Modified rewards function -- custom
         state = self._getDroneStateVector(0) #Ev: grabs full state (numpy array of shape (20,)
@@ -89,7 +87,11 @@ class HoverAviary(BaseSingleAgentAviary):
 
         original = False
         if original:
+            # Original rewards function from the paper
+            # state = self._getDroneStateVector(0)
+            # return -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
             reward = -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
+            return reward
         else:
             #ATTEMPTING TO TRANSLATE FROM InclinedDroneLander 3D setpoint Euclidean reward scheme
             #https://github.com/Jacobkooi/InclinedDroneLander/blob/master/Reward/rewardfuncs.py
@@ -121,7 +123,7 @@ class HoverAviary(BaseSingleAgentAviary):
 
             # Total cost
             total_reward = -1 * error_position + -0.25 * error_velocity - 0.1 * error_angle + proximity_reward #- error_action + bounds_reward
-            reward = total_reward
+            return total_reward
 
     ################################################################################
     
