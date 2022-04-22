@@ -72,8 +72,56 @@ class HoverAviary(BaseSingleAgentAviary):
             The reward.
 
         """
-        state = self._getDroneStateVector(0)
-        return -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
+        # Original rewards function from the paper
+        # state = self._getDroneStateVector(0)
+        # return -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
+
+        # Modified rewards function -- custom
+        state = self._getDroneStateVector(0) #Ev: grabs full state (numpy array of shape (20,)
+        #pos, quat, rpy, vel, ang_v, last_clipped_action
+
+        #goal_state = np.array([0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]) #pos, quat, rpy, vel, ang_v
+        goal_pos = np.array([0, 0, 1])  # pos
+        goal_vel = np.array([0, 0, 0])  # vel
+        goal_ang = np.array([0, 0, 0])  # rpy
+
+        goal_threshold = 0.01
+
+        original = False
+        if original:
+            reward = -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
+        else:
+            #ATTEMPTING TO TRANSLATE FROM InclinedDroneLander 3D setpoint Euclidean reward scheme
+            #https://github.com/Jacobkooi/InclinedDroneLander/blob/master/Reward/rewardfuncs.py
+
+            # Position cost -- penalizes euclidean distance from goal pos
+            error_position = np.linalg.norm(state[0:3] - goal_pos)
+
+            # Velocity cost -- penalizes nonzero velocities
+            error_velocity = np.linalg.norm(state[10:13] - goal_vel)
+
+            # Orientation cost -- Ensures the drone is flat
+            error_angle = np.linalg.norm(state[7:10] - goal_ang)
+
+            if np.linalg.norm(goal_pos[0:3]-state[0:3]) < goal_threshold:
+                proximity_reward = 2 # nice job reward
+            else:
+                proximity_reward = -0.05 # living cost
+
+            # Action cost (action = [Thrust, Phi_commanded, Theta_commanded])
+            # error_action = 0.1 * (action[1] * 2 + action[2] * 2) * 1 / (max(error_position, 0.001))
+
+            # Bounds cost (x,y,z bounds)
+            # bounds_reward = -1 * int((abs(state[0] - observation_space.high[0]) < 0.05 or
+            #                           abs(state[0] - observation_space.low[0]) < 0.05 or
+            #                           abs(state[1] - observation_space.high[1]) < 0.05 or
+            #                           abs(state[1] - observation_space.low[1]) < 0.05 or
+            #                           abs(state[2] - observation_space.high[2]) < 0.05 or
+            #                           abs(state[2] - observation_space.low[2]) < 0.05))
+
+            # Total cost
+            total_reward = -1 * error_position + -0.25 * error_velocity - 0.1 * error_angle + proximity_reward #- error_action + bounds_reward
+            reward = total_reward
 
     ################################################################################
     
