@@ -58,6 +58,8 @@ EPISODE_REWARD_THRESHOLD = -0 # Upperbound: rewards are always negative, but non
 
 if __name__ == "__main__":
 
+    desired_iterations = 2000
+
     #### Define and parse (optional) arguments for the script ##
     parser = argparse.ArgumentParser(description='Single agent reinforcement learning experiments script')
     parser.add_argument('--env',        default='hover',      type=str,             choices=['takeoff', 'hover', 'flythrugate', 'tune'], help='Task (default: hover)', metavar='')
@@ -246,7 +248,7 @@ if __name__ == "__main__":
                                  deterministic=True,
                                  render=False
                                  )
-    model.learn(total_timesteps=35000, #int(1e12),
+    model.learn(total_timesteps=desired_iterations, #int(1e12),
                 callback=eval_callback,
                 log_interval=100,
                 )
@@ -256,6 +258,6 @@ if __name__ == "__main__":
     print(filename)
 
     #### Print training progression ############################
-    with np.load(filename+'/evaluations.npz') as data:
-        for j in range(data['timesteps'].shape[0]):
-            print(str(data['timesteps'][j])+","+str(data['results'][j][0][0]))
+    # with np.load(filename+'/evaluations.npz') as data:
+    #     for j in range(data['timesteps'].shape[0]):
+    #         print(str(data['timesteps'][j])+","+str(data['results'][j][0][0]))

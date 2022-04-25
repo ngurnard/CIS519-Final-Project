@@ -1,8 +1,11 @@
 import numpy as np
 from gym import spaces
+import os
 
 from gym_pybullet_drones.envs.BaseAviary import DroneModel, Physics, BaseAviary
 from gym_pybullet_drones.envs.single_agent_rl.BaseSingleAgentAviary import ActionType, ObservationType, BaseSingleAgentAviary
+
+import pybullet as p
 
 class HoverAviary(BaseSingleAgentAviary):
     """Single agent RL problem: hover at position."""
@@ -60,6 +63,32 @@ class HoverAviary(BaseSingleAgentAviary):
                          obs=obs,
                          act=act
                          )
+
+    ################################################################################
+    
+    def _addObstacles(self):
+        """Add obstacles to the environment.
+
+        Extends the superclass method and add the gate build of cubes and an architrave.
+
+        """
+        super()._addObstacles()
+        p.loadURDF(os.path.dirname(os.path.abspath(__file__))+"/../../assets/architrave.urdf",
+                   [0, 0, .55],
+                   p.getQuaternionFromEuler([0, 0, 0]),
+                   physicsClientId=self.CLIENT
+                   )
+        for i in range(10): 
+            p.loadURDF("cube_small.urdf",
+                       [-.3, 0, .02+i*0.05],
+                       p.getQuaternionFromEuler([0, 0, 0]),
+                       physicsClientId=self.CLIENT
+                       )
+            p.loadURDF("cube_small.urdf",
+                       [.3, 0, .02+i*0.05],
+                       p.getQuaternionFromEuler([0,0,0]),
+                       physicsClientId=self.CLIENT
+                       )
 
     ################################################################################
     

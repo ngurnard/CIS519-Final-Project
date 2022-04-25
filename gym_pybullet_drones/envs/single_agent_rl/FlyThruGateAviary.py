@@ -72,20 +72,20 @@ class FlyThruGateAviary(BaseSingleAgentAviary):
         Extends the superclass method and add the gate build of cubes and an architrave.
 
         """
-        super()._addObstacles()
+        super()._addObstacles() 
         p.loadURDF(os.path.dirname(os.path.abspath(__file__))+"/../../assets/architrave.urdf",
-                   [0, -1, .55],
+                   [0, 0, .55],
                    p.getQuaternionFromEuler([0, 0, 0]),
                    physicsClientId=self.CLIENT
                    )
         for i in range(10): 
             p.loadURDF("cube_small.urdf",
-                       [-.3, -1, .02+i*0.05],
+                       [-0.3, 0, .02+i*0.05],
                        p.getQuaternionFromEuler([0, 0, 0]),
                        physicsClientId=self.CLIENT
                        )
             p.loadURDF("cube_small.urdf",
-                       [.3, -1, .02+i*0.05],
+                       [0.3, 0, .02+i*0.05],
                        p.getQuaternionFromEuler([0,0,0]),
                        physicsClientId=self.CLIENT
                        )
@@ -102,8 +102,15 @@ class FlyThruGateAviary(BaseSingleAgentAviary):
 
         """
         state = self._getDroneStateVector(0)
-        norm_ep_time = (self.step_counter/self.SIM_FREQ) / self.EPISODE_LEN_SEC
-        return -10 * np.linalg.norm(np.array([0, -2*norm_ep_time, 0.75])-state[0:3])**2
+        original = False
+
+        if (original == True):
+            norm_ep_time = (self.step_counter/self.SIM_FREQ) / self.EPISODE_LEN_SEC # number of steps in episode/sim_freq gives time. Dividing by episode length then gives percent done
+            return -10 * np.linalg.norm(np.array([0, -2*norm_ep_time, 0.75])-state[0:3])**2 # move in the y direction at a height of 0.75
+        else: 
+            # NOTE: this was not modified because I decided to try and put an object on the hover path first
+            norm_ep_time = (self.step_counter/self.SIM_FREQ) / self.EPISODE_LEN_SEC # number of steps in episode/sim_freq gives time. Dividing by episode length then gives percent done
+            return -10 * np.linalg.norm(np.array([0, -2*norm_ep_time, 0.75])-state[0:3])**2 # move in the y direction at a height of 0.75
 
     ################################################################################
     
