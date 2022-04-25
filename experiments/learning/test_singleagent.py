@@ -1,3 +1,15 @@
+# ---
+# jupyter:
+#   jupytext:
+#     cell_metadata_filter: -all
+#     formats: ipynb,py:light
+#     text_representation:
+#       extension: .py
+#       format_name: light
+#       format_version: '1.5'
+#       jupytext_version: 1.13.8
+# ---
+
 """Test script for single agent problems.
 
 This scripts runs the best model found by one of the executions of `singleagent.py`
@@ -113,7 +125,7 @@ if __name__ == "__main__":
                     )
     obs = test_env.reset()
     start = time.time()
-    for i in range(6*int(test_env.SIM_FREQ/test_env.AGGR_PHY_STEPS)): # Up to 6''
+    for i in range(10*int(test_env.SIM_FREQ/test_env.AGGR_PHY_STEPS)): # Up to 6''
         action, _states = model.predict(obs,
                                         deterministic=True # OPTIONAL 'deterministic=False'
                                         )

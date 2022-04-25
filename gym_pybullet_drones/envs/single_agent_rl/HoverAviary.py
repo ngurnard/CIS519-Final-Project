@@ -114,7 +114,7 @@ class HoverAviary(BaseSingleAgentAviary):
 
         goal_threshold = 0.01
 
-        original = False
+        original = True
         if original:
             # Original rewards function from the paper
             # state = self._getDroneStateVector(0)
