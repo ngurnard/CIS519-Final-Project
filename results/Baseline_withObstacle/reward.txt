@@ -1,0 +1,14 @@
+def _computeReward(self):
+        """Computes the current reward value.
+
+        Returns
+        -------
+        float
+            The reward.
+
+        """
+
+        state = self._getDroneStateVector(0)
+        return -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
+
+        return reward
