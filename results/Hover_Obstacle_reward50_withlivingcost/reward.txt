@@ -1,0 +1,24 @@
+def _computeReward(self):
+        """Computes the current reward value.
+
+        Returns
+        -------
+        float
+            The reward.
+
+        """
+
+        goal_threshold = 0.01
+        goal = np.array([0,0,1])
+
+        state = self._getDroneStateVector(0)
+        if np.linalg.norm(goal - state[0:3]) < goal_threshold:
+            proximity_reward = 50
+        else:
+            proximity_reward = -1 * np.linalg.norm(goal-state[0:3])**2
+
+        living_cost = -0.05
+
+        reward = proximity_reward + living_cost
+
+        return reward
