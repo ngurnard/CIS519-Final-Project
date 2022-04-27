@@ -12,8 +12,8 @@
 |[Hover_reward50_withlivingcost](https://github.com/ngurnard/CIS519-Final-Project/tree/master/results/Hover_reward50_withlivingcost)| NO | YES | Positve reward of 50 near goal |
 |[Hover_reward50](https://github.com/ngurnard/CIS519-Final-Project/tree/master/results/Hover_reward50)| NO | NO | Positve reward of 50 near goal |
 
-### Model folder naming convention
-'save-<env>-<algo>-<obs>-<act>-<iter>-<time_date>'
+### Model folder naming convention(Sub folder)
+`save-\<env\>-\<algo\>-\<obs\>-\<act\>-\<iter\>-\<time_date\>`
 - env: Action to be performed
 - algo: RL algorithm used from [Stable Baselines3](https://stable-baselines3.readthedocs.io/en/master/)
 - obs: Observation type
